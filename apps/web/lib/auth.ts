@@ -9,7 +9,6 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   session: { strategy: "jwt" },
-  debug: true,
   callbacks: {
     async signIn({ user, profile }) {
       const allow = (process.env.ALLOWED_EMAILS || "")
@@ -26,10 +25,7 @@ export const authOptions: NextAuthOptions = {
         .trim()
         .toLowerCase();
 
-      const ok = allow.includes(email);
-      console.log('[auth] signIn', { email, ok, allowCount: allow.length, allow });
-      // TEMP DEBUG: allow through even if not matched so we can isolate root cause.
-      return true;
+      return allow.includes(email);
     },
   },
 };
