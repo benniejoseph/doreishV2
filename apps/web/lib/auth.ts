@@ -9,14 +9,23 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   session: { strategy: "jwt" },
+  debug: true,
   callbacks: {
-    async signIn({ user }) {
+    async signIn({ user, profile }) {
       const allow = (process.env.ALLOWED_EMAILS || "")
         .split(",")
         .map((s) => s.trim().toLowerCase())
         .filter(Boolean);
       if (allow.length === 0) return true; // no allowlist configured
-      const email = (user.email || "").toLowerCase();
+
+      const email = (
+        (user?.email as string | undefined) ||
+        ((profile as any)?.email as string | undefined) ||
+        ""
+      )
+        .trim()
+        .toLowerCase();
+
       return allow.includes(email);
     },
   },
