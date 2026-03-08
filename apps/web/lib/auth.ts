@@ -26,7 +26,9 @@ export const authOptions: NextAuthOptions = {
         .trim()
         .toLowerCase();
 
-      return allow.includes(email);
+      const ok = allow.includes(email);
+      console.log('[auth] signIn', { email, ok, allowCount: allow.length });
+      return ok;
     },
   },
 };
